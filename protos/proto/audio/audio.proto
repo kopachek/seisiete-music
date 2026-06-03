@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package audio;
+
+option go_package = "github.com/kopachek/seisiete-music/protos/gen/go/audio;audiov1";
+
+service Audio {
+    rpc GetAudioByName (GetAudioByNameRequest) returns (stream AudioChunk);
+    rpc GetAudioByArtist (GetAudioByArtistRequest) returns (stream AudioChunk);
+    rpc Load (stream LoadAudioRequest) returns (LoadAudioResponse);
+}
+
+message AudioRecord {
+    int64 id = 1;
+    string name = 2;
+    string artist = 3;
+    string link = 4;
+}
+
+message GetAudioByNameRequest {
+    string name = 1;
+    string token = 2;
+}
+
+message GetAudioByArtistRequest {
+    string artist = 1;
+    string token = 2;
+}
+
+message AudioChunk {
+    bytes data = 1;
+    AudioRecord metadata = 2;
+}
+
+message LoadAudioRequest {
+    string token = 1;
+    oneof payload {
+        LoadAudioMetadata metadata = 2;
+        bytes chunk = 3;
+    }
+}
+
+message LoadAudioMetadata {
+    string name = 1;
+    string artist = 2;
+}
+
+message LoadAudioResponse {
+    int64 id = 1;
+    string link = 2;
+}

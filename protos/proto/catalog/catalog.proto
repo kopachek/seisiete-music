@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package catalog;
+
+option go_package = "github.com/kopachek/seisiete-music/protos/gen/go/catalog;catalogv1";
+
+service Catalog {
+    rpc GetPlaylistByName (GetPlaylistByNameRequest) returns (GetPlaylistResponse);
+    rpc GetPlaylistByAuthor (GetPlaylistByAuthorRequest) returns (GetPlaylistsResponse);
+    rpc CreatePlaylist (CreatePlaylistRequest) returns (CreatePlaylistResponse);
+    rpc UpdatePlaylist (UpdatePlaylistRequest) returns (UpdatePlaylistResponse);
+}
+
+message Playlist {
+    int64 id = 1;
+    string name = 2;
+    string author = 3;
+    int64 creator_id = 4;
+    repeated int64 audio_ids = 5;
+    bool is_private = 6;
+}
+
+message GetPlaylistByNameRequest {
+    string name = 1;
+    string token = 2;
+}
+
+message GetPlaylistByAuthorRequest {
+    string author = 1;
+    string token = 2;
+}
+
+message GetPlaylistResponse {
+    Playlist playlist = 1;
+}
+
+message GetPlaylistsResponse {
+    repeated Playlist playlists = 1;
+}
+
+message CreatePlaylistRequest {
+    string token = 1;
+    string name = 2;
+    string author = 3;
+    repeated int64 audio_ids = 4;
+    bool is_private = 5;
+}
+
+message CreatePlaylistResponse {
+    int64 id = 1;
+}
+
+message UpdatePlaylistRequest {
+    string token = 1;
+    int64 id = 2;
+    string name = 3;
+    string author = 4;
+    repeated int64 audio_ids = 5;
+    bool is_private = 6;
+}
+
+message UpdatePlaylistResponse {
+    bool success = 1;
+}
